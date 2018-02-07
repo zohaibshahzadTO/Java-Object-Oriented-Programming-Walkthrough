@@ -82,3 +82,97 @@ Information-hiding: By interacting only with an object's methods, the details of
 <b>Code re-use:</b> If an object already exists (perhaps written by another software developer), you can use that object in your program. This allows specialists to implement/test/debug complex, task-specific objects, which you can then trust to run in your own code.
 
 <b>Pluggability and debugging ease:</b> If a particular object turns out to be problematic, you can simply remove it from your application and plug in a different object as its replacement. This is analogous to fixing mechanical problems in the real world. If a bolt breaks, you replace it, not the entire machine.
+
+# What is a Class?
+
+n the real world, you'll often find many individual objects all of the same kind. There may be thousands of other bicycles in existence, all of the same make and model. Each bicycle was built from the same set of blueprints and therefore contains the same components. In object-oriented terms, we say that your bicycle is an instance of the class of objects known as bicycles. A class is the blueprint from which individual objects are created.
+
+The following Bicycle class is one possible implementation of a bicycle:
+
+
+<b>class Bicycle {
+
+    int cadence = 0;
+    int speed = 0;
+    int gear = 1;
+
+    void changeCadence(int newValue) {
+         cadence = newValue;
+    }
+
+    void changeGear(int newValue) {
+         gear = newValue;
+    }
+
+    void speedUp(int increment) {
+         speed = speed + increment;   
+    }
+
+    void applyBrakes(int decrement) {
+         speed = speed - decrement;
+    }
+
+    void printStates() {
+         System.out.println("cadence:" +
+             cadence + " speed:" +
+             speed + " gear:" + gear);
+    }
+}
+</b>
+
+The syntax of the Java programming language will look new to you, but the design of this class is based on the previous discussion of bicycle objects. The fields cadence, speed, and gear represent the object's state, and the methods (changeCadence, changeGear, speedUp etc.) define its interaction with the outside world.
+
+You may have noticed that the Bicycle class does not contain a main method. That's because it's not a complete application; it's just the blueprint for bicycles that might be used in an application. The responsibility of creating and using new Bicycle objects belongs to some other class in your application.
+
+Here's a BicycleDemo class that creates two separate Bicycle objects and invokes their methods:
+
+
+<b>class BicycleDemo {
+    public static void main(String[] args) {
+
+        // Create two different
+        // Bicycle objects
+        Bicycle bike1 = new Bicycle();
+        Bicycle bike2 = new Bicycle();
+
+        // Invoke methods on
+        // those objects
+        bike1.changeCadence(50);
+        bike1.speedUp(10);
+        bike1.changeGear(2);
+        bike1.printStates();
+
+        bike2.changeCadence(50);
+        bike2.speedUp(10);
+        bike2.changeGear(2);
+        bike2.changeCadence(40);
+        bike2.speedUp(10);
+        bike2.changeGear(3);
+        bike2.printStates();
+    }
+}
+
+The output of this test prints the ending pedal cadence, speed, and gear for the two bicycles:
+
+cadence:50 speed:10 gear:2
+cadence:40 speed:20 gear:3</b>
+
+
+# What Is Inheritance?
+
+Different kinds of objects often have a certain amount in common with each other. Mountain bikes, road bikes, and tandem bikes, for example, all share the characteristics of bicycles (current speed, current pedal cadence, current gear). Yet each also defines additional features that make them different: tandem bicycles have two seats and two sets of handlebars; road bikes have drop handlebars; some mountain bikes have an additional chain ring, giving them a lower gear ratio.
+
+Object-oriented programming allows classes to inherit commonly used state and behavior from other classes. In this example, Bicycle now becomes the superclass of MountainBike, RoadBike, and TandemBike. In the Java programming language, each class is allowed to have one direct superclass, and each superclass has the potential for an unlimited number of subclasses:
+
+A hierarchy of bicycle classes.
+
+The syntax for creating a subclass is simple. At the beginning of your class declaration, use the extends keyword, followed by the name of the class to inherit from:
+
+<b>class MountainBike extends Bicycle {
+
+    // new fields and methods defining 
+    // a mountain bike would go here
+
+}</b>
+
+This gives MountainBike all the same fields and methods as Bicycle, yet allows its code to focus exclusively on the features that make it unique. This makes code for your subclasses easy to read. However, you must take care to properly document the state and behavior that each superclass defines, since that code will not appear in the source file of each subclass.
