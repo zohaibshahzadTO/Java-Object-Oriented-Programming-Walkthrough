@@ -231,57 +231,10 @@ class ACMEBicycle implements Bicycle {
 }
 Implementing an interface allows a class to become more formal about the behavior it promises to provide. Interfaces form a contract between the class and the outside world, and this contract is enforced at build time by the compiler. If your class claims to implement an interface, all methods defined by that interface must appear in its source code before the class will successfully compile.
 
-# What Is an Interface?
+# What Is a Package?
 
-As you've already learned, objects define their interaction with the outside world through the methods that they expose. Methods form the object's interface with the outside world; the buttons on the front of your television set, for example, are the interface between you and the electrical wiring on the other side of its plastic casing. You press the "power" button to turn the television on and off.
+A package is a namespace that organizes a set of related classes and interfaces. Conceptually you can think of packages as being similar to different folders on your computer. You might keep HTML pages in one folder, images in another, and scripts or applications in yet another. Because software written in the Java programming language can be composed of hundreds or thousands of individual classes, it makes sense to keep things organized by placing related classes and interfaces into packages.
 
-In its most common form, an interface is a group of related methods with empty bodies. A bicycle's behavior, if specified as an interface, might appear as follows:
+The Java platform provides an enormous class library (a set of packages) suitable for use in your own applications. This library is known as the "Application Programming Interface", or "API" for short. Its packages represent the tasks most commonly associated with general-purpose programming. For example, a String object contains state and behavior for character strings; a File object allows a programmer to easily create, delete, inspect, compare, or modify a file on the filesystem; a Socket object allows for the creation and use of network sockets; various GUI objects control buttons and checkboxes and anything else related to graphical user interfaces. There are literally thousands of classes to choose from. This allows you, the programmer, to focus on the design of your particular application, rather than the infrastructure required to make it work.
 
-<b>interface Bicycle {
-
-    //  wheel revolutions per minute
-    void changeCadence(int newValue);
-
-    void changeGear(int newValue);
-
-    void speedUp(int increment);
-
-    void applyBrakes(int decrement);
-}
-To implement this interface, the name of your class would change (to a particular brand of bicycle, for example, such as ACMEBicycle), and you'd use the implements keyword in the class declaration:
-
-class ACMEBicycle implements Bicycle {
-
-    int cadence = 0;
-    int speed = 0;
-    int gear = 1;
-
-   // The compiler will now require that methods
-   // changeCadence, changeGear, speedUp, and applyBrakes
-   // all be implemented. Compilation will fail if those
-   // methods are missing from this class.
-
-    void changeCadence(int newValue) {
-         cadence = newValue;
-    }
-
-    void changeGear(int newValue) {
-         gear = newValue;
-    }
-
-    void speedUp(int increment) {
-         speed = speed + increment;   
-    }
-
-    void applyBrakes(int decrement) {
-         speed = speed - decrement;
-    }
-
-    void printStates() {
-         System.out.println("cadence:" +
-             cadence + " speed:" +
-             speed + " gear:" + gear);
-    }
-}</b>
-
-Implementing an interface allows a class to become more formal about the behavior it promises to provide. Interfaces form a contract between the class and the outside world, and this contract is enforced at build time by the compiler. If your class claims to implement an interface, all methods defined by that interface must appear in its source code before the class will successfully compile.
+The Java Platform API Specification contains the complete listing for all packages, interfaces, classes, fields, and methods supplied by the Java SE platform. Load the page in your browser and bookmark it. As a programmer, it will become your single most important piece of reference documentation.
