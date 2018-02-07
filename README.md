@@ -242,3 +242,11 @@ The Java Platform API Specification contains the complete listing for all packag
 # Polymorphism
 
 Polymorphism is the ability of an object to take on many forms. The most common use of polymorphism in OOP occurs when a parent class reference is used to refer to a child class object. We'll dive into this concept later on in the walkthrough.
+
+# Side Note: Get and Set methods
+
+In a few mini programs we work with in this walkthrough, you'll encounter methods that contain *get* or *set* and I'm not talking about HTTP requests and that sort of course.
+
+To understand get and set, it's all related to how variables are passed between different classes.
+
+The get method is used to obtain or retrieve a particular variable value from a class. A set value is used to store the variables. The whole point of the get and set is to retrieve and store the data values accordingly.
