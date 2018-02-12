@@ -15,7 +15,7 @@ public class InheritanceDemo {
         x = 17; y = 42; z = 99;
       }
 
-      pubic void outputValues() {
+      public void outputValues() {
         System.out.println("x is " + x);
         System.out.println("y is " + y);
         System.out.println("z is " + z);

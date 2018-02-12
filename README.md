@@ -250,3 +250,5 @@ In a few mini programs we work with in this walkthrough, you'll encounter method
 To understand get and set, it's all related to how variables are passed between different classes.
 
 The get method is used to obtain or retrieve a particular variable value from a class. A set value is used to store the variables. The whole point of the get and set is to retrieve and store the data values accordingly.
+
+# Java Collection Framework
