@@ -126,4 +126,40 @@ Of course, we still need a class with a main method:
 In an application that interacts with the user through a console window, user input is under control of the program. The program asks the user for input in a specific order. For example, a program might ask the user to supply first a name, then a dollar amount. But the programs that you use every day on your computer
 don’t work like that. In a program with a modern graphical user interface, the user is in control. The user can use both the mouse and the keyboard and can manipulate many parts of the user interface in any desired order. For example, the user can enter information into text fields, pull down menus, click buttons, and drag scroll bars in any order. The program must react to the user commands in whatever order they arrive. Having to deal with many possible inputs in random order is quite a bit harder than simply forcing the user to supply input in a fixed order. In the following sections, you will learn how to write Java programs that can react to user-interface events.
 
-# E
+# Listening to Events
+
+Whenever the user of a graphical program types characters or uses the mouse anywhere inside one of the windows of the program, the program receives
+a notification that an event has occurred. For example, whenever the mouse moves a tiny interval over a window, a “mouse move” event is generated. Clicking
+a button or selecting a menu item generates an “action” event.
+
+Most programs don’t want to be flooded by irrelevant events. For example, when a button is clicked with the mouse, the mouse moves over the button, then the mouse button is pressed, and finally the button is released. Rather than receiving all these mouse events, a program can indicate that it only cares about button clicks, not about the underlying mouse events. On the other hand, if the mouse input is used for drawing shapes on a virtual canvas, a program needs to closely track mouse events.
+
+Every program must indicate which events it needs to receive. It does that  installing event listener objects. These objects are instances of classes that you must provide. The methods of your event listener classes contain the instructions that you want to have executed when the events occur.
+
+To install a listener, you need to know the event source. The event source is the
+user-interface component, such as a button, that generates a particular event. You add an event listener object to the appropriate event sources. Whenever the event occurs, the event source calls the appropriate methods of all attached event listeners.
+
+This sounds somewhat abstract, so let’s run through an extremely simple program
+that prints a message whenever a button is clicked. Button listeners must belong to a class that implements the ActionListener interface:
+
+  *public interface ActionListener {
+    void actionPerformed(ActionEvent event);
+  }*
+
+This particular interface has a single method, *actionPerformed*. It is our job to supply a class whose *actionPerformed* method contains the instructions that we want executed whenever the button is clicked. The following is a very simple example of such as a listener class:
+
+  *See ClickListener.java file*
+
+We ignore the event parameter variable of the actionPerformed method—it contains
+additional details about the event, such as the time at which it occurred. Note that the event handling classes are defined in the java.awt.event package. (AWT is the Abstract Window Toolkit, the Java library for dealing with windows and events.)
+
+Once the listener class has been declared, we need to construct an object of the class and add it to the button:
+
+  *ActionListener listener = new ClickListener();
+   button.addActionListener(listener);*
+
+Whenever the button is clicked, the Java event handling library calls:
+
+  *Listener.actionPerformed(event);*
+
+As a result, the message is printed.
