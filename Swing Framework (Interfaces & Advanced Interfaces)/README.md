@@ -291,3 +291,30 @@ from each text field, using the getText method of the JTextField class. The getT
       resultLabel.setText("Balance: " + balance);
     }
   }*
+
+# Text Areas
+
+In the preceding section, you saw how to construct text fields. A text field holds a single line of text. To display multiple lines of text, use the JTextArea class.
+
+When constructing a text area, you can specify the number of rows and columns:
+
+  *final int ROWS = 10; // lines of text
+   final int COLUMNS = 30; // characters in each row
+   JTextArea textArea = new JTextArea(ROWS, COLUMNS);*
+
+Use the setText method to set the text of a text field or text area. The append method adds text to the end of a text area. Use newline characters to seperate lines, like this:
+
+  *textArea.append(balance + "\n");*
+
+If we want to use a text field or text area for display purposes only, call the set-Editable method like this:
+
+  *textArea.setEditable(false);*
+
+Now the user can no longer edit the contents of the field, but the program can still call setText and append to change it.
+
+To add scroll bars to a text area, use JScrollPane, like this:
+
+  *JTextArea textArea = new JTextArea(ROWS, COLUMNS);
+   JScrollPane scrollPane = new JScrollPane(textArea);*
+
+Then add the scroll pane to the panel.
