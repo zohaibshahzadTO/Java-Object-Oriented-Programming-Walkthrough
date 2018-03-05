@@ -260,3 +260,34 @@ We make this class an inner class so that it can access the balance and resultLa
   }*
 
   See the complete program in the InvestmentFrame.java file within the repository.
+
+
+# Processing Text Input
+
+We continue our discussion with graphical user interfaces that accept text input. Of course, a graphical application can receive text input by calling the showInputDialog method of the JOptionPane class, but popping up a separate dialog box for each input is not a natural user interface. Most graphical programs collect text input through text components. In the following two sections, we will learn how to add text components to a graphical application, and how to read what the user types into them.
+
+# Text fields
+
+The *JTextField* class provides a text field for reading a single line of text. When we construct a text field, we need to supply the width - the approximate number of characters that we expect the user to type.
+
+  *final int FIELD_WIDTH = 10;
+   rateField = new JTextField(FIELD_WIDTH);*
+
+Users can type additional characters, but then a part of the contents of the field becomes invisible. We'll want to label each text field so that the user knows what to type into it. Construct a JLabel object for each label.
+
+  *JLabel rateLabel = new JLabel("Interest rate: ");*
+
+You want to give the user an opportunity to enter all information into the text fields before processing it. Therefore, you should supply a button that the user can press to indicate that the input is ready for processing.
+
+When that button is clicked, its actionPerformed method should read the user input
+from each text field, using the getText method of the JTextField class. The getText method returns a String object. In our sample program, we turn the string into a number, using the Double.parseDouble method. After updating the account, we show the balance in another label.
+
+  *class AddInterestListener implements ActionListener {
+
+    public void actionPerformed(ActionEvent event) {
+      double rate = Double.parseDouble(rateField.getText());
+      double interest = balance * rate / 100;
+      balance = balance + interest;
+      resultLabel.setText("Balance: " + balance);
+    }
+  }*
