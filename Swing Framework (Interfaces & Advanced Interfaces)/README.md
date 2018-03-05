@@ -163,3 +163,100 @@ Whenever the button is clicked, the Java event handling library calls:
   *Listener.actionPerformed(event);*
 
 As a result, the message is printed.
+
+# Using Inner Classes for Listeners
+
+In the preceding section, you saw how to specify button actions. The code for the
+button action is placed into a listener class. It is common to implement listener classes as inner classes like this:
+
+
+    *public class ButtonFrame2 extends JFrame
+    {
+    . . .
+      // This inner class is declared inside the frame class
+      class ClickListener implements ActionListener
+      {
+        . . .
+      }
+
+      private void createComponents()
+      {
+        button = new JButton("Click me!");
+        ActionListener listener = new ClickListener();
+        button.addActionListener(listener);
+      . . .
+      }
+    }*
+
+An inner class is simply a class that is declared inside another class.
+There are two advantages to making a listener class into an inner class. First, listener classes tend to be very short. You can put the inner class close to where it is needed, without cluttering up the remainder of the project. Moreover, inner classes have a very attractive feature: Their methods can access instance variables and methods of the surrounding class.
+
+This feature is particularly useful when implementing event handlers. It allows
+the inner class to access variables without having to receive them as constructor or method arguments.
+
+Let’s look at an example. Instead of printing the message “I was clicked”, we want
+to show it in a label. If we make the action listener into an inner class of the frame class, its actionPerformed method can access the label instance variable and call the setText method, which changes the label text.
+
+    *public class ButtonFrame2 extends JFrame
+    {
+      private JButton button;
+      private JLabel label;
+      . . .
+      class ClickListener implements ActionListener
+      {
+        public void actionPerformed(ActionEvent event)
+        {
+          // Accesses label variable from surrounding class
+          label.setText("I was clicked");
+        }
+      }
+      . . .
+    }*
+
+
+# Application: Showing Growth of an Investment
+
+In this section, we will build a practical application with a graphical user interface. A frame displays the amount of money in a bank account. Whenever the user clicks a button, 5 percent interest is added, and the new balance is displayed.
+
+We need a button and a label for the user interface. We also need to store the current balance:
+
+  *public class InvestmentFrame extends JFrame {
+    private JButton button;
+    private JLabel resultLabel;
+    private double balance;
+
+    private static final double INTEREST_RATE = 5;
+    private static final double INITIAL_BALANCE = 1000;
+    ...    
+  }*
+
+We initialize the balance when the frame is constructed. Then we add the button and label to a panel. and the panel to the frame:
+
+  *public InvestmentFrame() {
+    balance = INITIAL_BALANCE;
+
+     createComponents();
+     setSize(FRAME_WIDTH, FRAME_HEIGHT);
+  }*
+
+Now we are ready for the hard part—the event listener that handles button
+clicks. As in the preceding section, it is necessary to declare a class that implements the ActionListener interface, and to place the button action into the actionPerformed method. Our listener class adds interest and displays the new balance:
+
+  *class AddInterestListener implements ActionListener {
+      public void actionPerformed(ActionEvent event) {
+        double interest = balance * INTEREST_RATE / 100;
+        balance = balance + interest;
+        resultLabel.setText("Balance: " + balance);
+      }
+  }*
+
+We make this class an inner class so that it can access the balance and resultLabel instance variables. Finally, we need to add an instance of the listener class to the button:
+
+  *private void createComponents() {
+    button = new JButton("Add Interest");
+    ActionListener listener = new AddInterestListener();
+    button.AddInterestListener(listener);
+    ...
+  }*
+
+  See the complete program in the InvestmentFrame.java file within the repository.
