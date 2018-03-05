@@ -318,3 +318,141 @@ To add scroll bars to a text area, use JScrollPane, like this:
    JScrollPane scrollPane = new JScrollPane(textArea);*
 
 Then add the scroll pane to the panel.
+
+See InvestmentFrame3.java file for sample program.
+
+# Creating Drawings
+
+You often want to include simple drawings such as graphs or charts in your programs. The Java library does not have any standard components for this purpose, but it is fairly easy to make your own drawings. The following sections show how:
+
+# Drawing on a Component
+
+We start out with a simple bar chart (see Figure 8) that is composed
+of three rectangles. You cannot draw directly onto a frame. Instead, you add a
+component to the frame and draw on the component. To do so, extend the JComponent class and override its paintComponent method.
+
+  *public class ChartComponent extends JComponent {
+
+    public void paintComponent(Graphics g) {
+
+      Drawing Instructions
+    }
+  }*
+When the component is shown for the first time, its paintComponent method is called automatically. The method is also called when the window is resized, or when it is shown again after it was hidden.
+
+The paintComponent method receives an object of type Graphics. The Graphics object stores the graphics state—the current color, font, and so on, that are used for drawing operations. The Graphics class has methods for drawing geometric shapes. The call:
+
+  *g.fillRect(x, y, width, height);*
+
+draws a solid rectangle with upper-left corner (x, y) and the given width and height.
+
+Here we draw three rectangles. They line up on the left because they all have x = 0. They also all have the same height.
+
+  *public class ChartComponent extends JComponent {
+    public void paintComponent(Graphics g) {
+     g.fillRect(0, 10, 200, 10);
+     g.fillRect(0, 30, 300, 10);
+     g.fillRect(0, 50, 100, 10);
+    }
+  }*
+
+Note that the coordinate system is different from the one used in mathematics. The origin (0, 0) is at the upper-left corner of the component, and the y-coordinate grows downward.
+
+Now we need to add the component to a frame, and show the frame. Because the frame is so simple, we don't make a frame subclass. Here is the viewer class.
+
+ *public class ChartViewer {
+
+   public static void main(String[] args) {
+
+     JFrame frame = new JFrame();
+
+     frame.setSize(400, 200);
+     frame.setTitle("A bar chart");
+     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+     JComponent component = new ChartComponent();
+     frame.add(component);
+
+     frame.setVisible(true);
+   }
+}*
+
+# Ovals, Lines, Text and Color
+
+In the preceding section, you learned how to write a program that draws rectangles. Now we turn to additional graphical elements that allow you to draw quite a few interesting pictures.
+
+To draw an oval, you specify its bounding box in the same way that
+you would specify a rectangle, namely by the x- and y-coordinates of the top-left corner and the width and height of the box. Then the call:
+
+  *g.drawOval(x, y, width, height);*
+
+draws the outline of an oval. To draw a circle, simply set the width and height to the same values:
+
+  *g.drawOval(x, y, diameter, diameter);*
+
+Notice that (x, y) is the top-left corner of the bounding box, not the center of the circle. If you want to fill the inside of an oval, use the fillOval method instead. Conversely, if you want only the outline of a rectangle, with no filling, use the drawRect method.
+
+To draw a line, call the drawLine method with the x- and y-coordinates of both end points:
+
+  *g.drawLine(x1, y1, x2, y2);*
+
+You often want to put text inside a drawing, for example, to label some of the parts. Use the drawString method of the Graphics class to draw a string anywhere in a window. You must specify the string and the x- and y-coordinates of the basepoint of the first character in the string (see Figure 10). For example,
+
+  *g.drawString("Message", 50, 100);*
+
+When you first start drawing, all shapes and strings are drawn with a black pen. To change the color, you need to supply an object of type Color. Java uses the RGB color model. That is, you specify a color by the amounts of the primary colors—red, green, and blue—that make up the color. The amounts are given as integers between 0 (primary color not present) and 255 (maximum amount present). For example, Color magenta = new Color(255, 0, 255);
+constructs a Color object with maximum red, no green, and maximum blue, yielding a bright purple color called magenta.
+
+# Application: Visualizing the Growth of an Investment
+
+In this section, we will add a bar chart to the investment program we created earlier. Whenever the user clicks on the "Add Interest" button, another bar is added to the bar chart. The chart class of the preceding section produced a fixed bar chart. We will develop an improved version that can draw a chart with any values. The chart keeps an array
+list of the values:
+
+  *public class ChartComponent extends JComponent {
+    private ArrayList<Double> values;
+    private double maxValue;
+    ...
+  }*
+
+When drawing the bars, we need to scale the values to fit into the chart. For example, if the investment program adds a value such as 10050 to the chart, we don’t want to draw a bar that is 10,050 pixels long. In order to scale the values, we need to know the largest value that should still fit inside the chart. We will ask the user of the chart component to provide that maximum in the constructor:
+
+  *public ChartComponent(double max) {
+    values = new ArrayList<Double>();
+    maxValue = max;
+  }*
+
+We compute the width of a bar as:
+
+  *int barWidth = (int) (getWidth() * value / maxValue);*
+
+The getWidth method returns the width of the component in pixels. If the value to be drawn equals maxValue, the bar stretches across the entire component width.
+
+Here is the complete paintComponent method. We stack the bars horizontally and
+leave small gaps between them:
+
+    *public void paintComponent(Graphics g)
+    {
+      final int GAP = 5;
+      final int BAR_HEIGHT = 10;
+
+      int y = GAP;
+
+      for (double value : values)
+      {
+        int barWidth = (int) (getWidth() * value / maxValue);
+        g.fillRect(0, y, barWidth, BAR_HEIGHT);
+        y = y + BAR_HEIGHT + GAP;
+      }
+    }*
+
+Whenever the user clicks the “Add Interest” button, a value is added to the array list. Afterward, it is essential to call the repaint method:
+
+    *public void append(double value)
+    {
+      values.add(value);
+      repaint();
+    }*
+
+The call to repaint forces a call to the paintComponent method. The paintComponent method redraws the component. Then the graph is drawn again, now showing the appended value.
+
+Why not call paintComponent directly? The simple answer is that you can’t—you don’t have a Graphics object that you can pass as an argument. Instead, you need to ask the Swing library to make the call to paintComponent at its earliest convenience. That is what the repaint method does.
