@@ -124,3 +124,101 @@ You can select an item for the user with the setSelectedItem method. Radio butto
 Anyone who has ever used a graphical user interface is familiar with pull-down menus. At the top of the frame is a menu bar that contains the top-level menus. Each menu is a collection of menu items and submenus.
 
 The sample program for this section builds up a small but typical menu and traps the action events from the menu items. The program allows the user to specify the font for a label by selecting a face name, font size, and font style. In Java it is easy to create these menus.
+
+You add the menu bar to the frame:
+
+   *public class MyFrame extends JFrame
+    {
+      public MyFrame()
+      {
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+        . . .
+      }
+      . . .
+    }*
+
+Menus are then added to the menu bar:
+
+   *JMenu fileMenu = new JMenu("File");
+    JMenu fontMenu = new JMenu("Font");
+    menuBar.add(fileMenu);
+    menuBar.add(fontMenu);*
+
+You add menu items and submenus with the add method:
+
+   *JMenuItem exitItem = new JMenuItem("Exit");
+    fileMenu.add(exitItem);
+    JMenu styleMenu = new JMenu("Style");
+    fontMenu.add(styleMenu); // A submenu*
+
+A menu item has no further submenus. When the user selects a menu item, the menu
+item sends an action event. Therefore, you want to add a listener to each menu item:
+
+   *ActionListener listener = new ExitItemListener();
+    exitItem.addActionListener(listener);*
+
+You add action listeners only to menu items, not to menus or the menu bar. When the
+user clicks on a menu name and a submenu opens, no action event is sent.
+To keep the program readable, it is a good idea to use a separate method for each
+menu or set of related menus. For example,
+
+   *public JMenu createFaceMenu()
+    {
+      JMenu menu = new JMenu("Face");
+      menu.add(createFaceItem("Serif"));
+      menu.add(createFaceItem("SansSerif"));
+      menu.add(createFaceItem("Monospaced"));
+      return menu;
+    }*
+
+Now consider the createFaceItem method. It has a string parameter variable for the
+name of the font face. When the item is selected, its action listener needs to
+
+1. Set the current face name to the menu item text.
+2. Make a new font from the current face, size, and style, and apply it to the label.
+
+We have three menu items, one for each supported face name. Each of them needs to set a different name in the first step. Of course, we can make three listener classes SerifListener, SansSerifListener, and MonospacedListener, but that is not very elegant. After
+all, the actions only vary by a single string. We can store that string inside the listener
+class and then make three objects of the same listener class:
+
+   *class FaceItemListener implements ActionListener
+    {
+      private String name;
+      public FaceItemListener(String newName) { name = newName; }
+
+      public void actionPerformed(ActionEvent event)
+      {
+        faceName = name; // Sets an instance variable of the frame class
+        setLabelFont();
+      }
+    }*
+
+Now we can install a listener object with the appropriate name:
+
+   *public JMenuItem createFaceItem(String name)
+    {
+      JMenuItem item = new JMenuItem(name);
+      ActionListener listener = new FaceItemListener(name);
+      item.addActionListener(listener);
+      return item;
+    }*
+
+This approach is still a bit tedious. We can do better by using a local inner class. When we move the declaration of the inner class inside the createFaceItem method, the actionPerformed method can access the name parameter variable directly. However, we need to observe a technical rule. Because name is a local variable, it must be declared as final to be accessible from an inner class method.
+
+  *public JMenuItem createFaceItem(final String name) {
+    // Final variables can be accessed from an inner class method
+    class FaceItemListener implements ActionListener { // a local inner class
+      public void actionPerformed(ActionEvent event) {
+        faceName = name; // Accessed the local variable name
+        setLabelFont();
+      }
+    }  
+  }
+  JMenuItem item = new JMenuItem(name);
+  ActionListener listener = new FaceItemListener();
+  item.addActionListener(listener);
+  return item;*
+
+
+# Using Timer Events for Animations
