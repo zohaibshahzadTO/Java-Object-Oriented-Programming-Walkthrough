@@ -55,4 +55,72 @@ all buttons in the set to a ButtonGroup object:
    group.add(largeButton);*
 
 Note that the button group does not place the buttons close to each other in the container.
-The purpose of the button group is simply to find out which buttons to turn off when one of them is turned on. It is still your job to arrange the buttons on the screen
+The purpose of the button group is simply to find out which buttons to turn off when one of them is turned on. It is still your job to arrange the buttons on the screen/
+
+The isSelected method is called to find out whether a button is currently selected
+or not. For example,
+
+  *if (largeButton.isSelected()) { size = LARGE_SIZE; }*
+
+Unfortunately, there is no convenient way of finding out which button in a group is currently selected. You have to call isSelected on each button. Because users will expect one radio button in a radio button group to be selected, call setSelected(true) on the default radio button before making the enclosing frame visible.
+
+If you have multiple button groups, it is a good idea to group them together visually. It is a good idea to use a panel for each set of radio buttons, but the panels themselves
+are invisible. You can add a border to a panel to make it visible.
+
+There are a large number of border types. We will show only a couple of variations and leave it to the border enthusiasts to look up the others in the Swing documentation.
+
+The EtchedBorder class yields a border with a three-dimensional, etched effect. You can add a border to any component, but most commonly you apply it to a panel:
+
+  *JPanel panel = new JPanel();
+   panel.setBorder(new EtchedBorder());*
+
+If you want to add a title to the border, you need to construct a Titled- Border. You make a titled border by supplying a basic border and then the title you want. Here is a typical example:
+
+  *panel.setBorder(new TitledBorder(new EtchedBorder(), "Size"));*
+
+
+# Check Boxes
+
+A check box is a user-interface component with two states: checked and unchecked.
+You use a group of check boxes when one selection does not exclude another. For
+example, the choices for “Bold” and “Italic” in Figure 4 are not exclusive. You can
+choose either, both, or neither. Therefore, they are implemented as a set of separate check boxes. Radio buttons and check boxes have different visual appearances. Radio buttons are round and have a black dot when selected. Check boxes are square and have a check mark when selected.
+
+You construct a check box by providing the name in the constructor:
+
+  *JCheckBox italicCheckBox = new JCheckBox("Italic");*
+
+Because check box settings do not exclude each other, you do not place a set of check
+boxes inside a button group. As with radio buttons, you use the isSelected method to find out whether a check box is currently checked or not.
+
+# Combo Boxes
+
+If you have a large number of choices, you don’t want to make a set of radio buttons,
+because that would take up a lot of space. Instead, you can use a combo box. This
+component is called a combo box because it is a combination of a list and a text field.
+The text field displays the name of the current selection. When you click on the arrow
+to the right of the text field of a combo box, a list of selections drops down, and you
+can choose one of the items in the list.
+
+If the combo box is editable, you can also type in your own selection. To make a
+combo box editable, call the setEditable method.
+
+You add strings to a combo box with the addItem method.
+
+   *JComboBox facenameCombo = new JComboBox();
+    facenameCombo.addItem("Serif");
+    facenameCombo.addItem("SansSerif");
+    . . .*
+
+You get the item that the user has selected by calling the getSelectedItem method.
+However, because combo boxes can store other objects in addition to strings, the get- SelectedItem method has return type Object. Hence, in our example, you must cast the returned value back to String:
+
+    *String selectedString = (String) facenameCombo.getSelectedItem();*
+
+You can select an item for the user with the setSelectedItem method. Radio buttons, check boxes, and combo boxes generate an ActionEvent whenever the user selects an item. In the following program, we don’t care which component was clicked—all components notify the same listener object. Whenever the user clicks on any one of them, we simply ask each component for its current content, using the isSelected and getSelectedItem methods. We then redraw the label with the new font.
+
+# Menus
+
+Anyone who has ever used a graphical user interface is familiar with pull-down menus. At the top of the frame is a menu bar that contains the top-level menus. Each menu is a collection of menu items and submenus.
+
+The sample program for this section builds up a small but typical menu and traps the action events from the menu items. The program allows the user to specify the font for a label by selecting a face name, font size, and font style. In Java it is easy to create these menus.
