@@ -120,3 +120,65 @@ Sometimes you want to enumerate all keys in a map. The keySet method yields the 
   }*
 
 Check the sample program in MapDemo.java
+
+
+# Stacks, Queues, and Priority Queues
+
+Now we'll cover stacks, queues, and priority queues. These data structures each have a different policy for data removal. Removing an element yields the most recently added element. the least recently added element, or the element with the highest priority.
+
+# Stacks
+
+A stack lets you insert and remove elements only at one end, traditionally called the top of the stack. New items can be added to the top of the stack. Items are removed from the top of the stack as well. Therefore, they are removed in the order that is opposite from the order in which they have been added, called last-in, first-out or LIFO order. For example, if you add items A, B, and C and then remove them, you obtain C, B, and A. With stacks, the addition
+and removal operations are called push and pop.
+
+  *Stack<String> s = new Stack<String>();
+   s.push("A"); s.push("B"); s.push("C");
+   while(s.size() > 0)
+   {
+     System..out.println(s.pop() + " "); // Print C B A
+   }*
+
+There are many applications for stacks in computer science. Consider the undo feature
+of a word processor. It keeps the issued commands in a stack. When you select “Undo”, the last command is undone, then the next-to-last, and so on.
+
+Another important example is the run-time stack that a processor or virtual machine keeps to store the values of variables in nested methods. Whenever a new method is called, its parameter variables and local variables are pushed onto a stack. When the method exits, they are popped off again.
+
+# Queues
+
+A queue lets you add items to one end of the queue (the tail) and remove them from the other end of the queue (the head). Queue yield items in a first-in, first-out basis. Items are removed in the same order in which they were added.
+
+A typical application is a print queue. A printer may be accessed by several applications, perhaps running on different computers. If each of the applications tried to access the printer at the same time, the printout would be garbled. Instead, each application places its print data into a file and adds that file to the print queue. When the printer is done printing one file, it retrieves the next one from the queue. Therefore, print jobs are printed using the “first-in, first-out” rule, which is a fair arrangement for users of the shared printer.
+
+The Queue interface in the standard Java library has methods add to add an element
+to the tail of the queue, remove to remove the head of the queue, and peek to get the
+head element of the queue without removing it.
+
+The LinkedList class implements the Queue interface. Whenever you need a queue, simply initialize a Queue variable with a LinkedList object:
+
+  *Queue<String> q = new LinkedList<String>();
+   q.add("A"); q.add("B"); q.add("C");
+   while(q.size() > 0)
+   {
+     System.out.println(q.remove() + " "); // Prints A B C
+   }*
+
+
+# Priority Queues
+
+A Priority Queue collects elements, each of which has a priority. A typical example of a priority queue is a collection of work requests, some of which may be more urgent than others.
+
+Unlike a regular queue, the priority queue does not maintain a first-in, first-out discipline. Instead, elements are retrieved according to their priority. In other words, new items can be inserted in any order. But whenever an item is removed, it is the item with the most urgent priority.
+
+It is customary to give low values to urgent priorities, with priority 1 denoting the most urgent priority. Thus, each removal operation extracts the minimum element from the queue.
+
+For example, consider this code in which we add objects of a class WorkOrder into a priority queue. Each work order has a priority and a description.
+
+ *PriorityQueue<WorkOrder> q = new PriorityQueue<WorkOrder>();
+  q.add(new WorkOrder(3, "Shampoo carpets"));
+  q.add(new WorkOrder(1, "Fix broken sink"));
+  q.add(new WorkOrder(2, "Order cleaning supplies"));*
+
+
+When calling q.remove() for the first time, the work order with a priority 1 is removed. The next call to q.remove() removes the work order whose priority is highest among those remaining in the queue - in our example, the work order with priority 2.
+
+If there happen to be two elements with the same priority, the priority queue will break ties arbitrarily. Because the priority queue needs to be able to tell which element is the smallest, the added elements should belong to a class that implements the Comparable interface.
